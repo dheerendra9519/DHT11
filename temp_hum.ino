@@ -6,30 +6,27 @@
 #include <Adafruit_Sensor.h>
 #include "MAX30100.h"
 
-// Replace with your network credentials
+
 const char* ssid = "JioFi3_31F18B";
 const char* password = "z9e7v7mpp7";
 
-#define DHTPIN D5     // Digital pin D1 connected to the DHT sensor
+#define DHTPIN D5    
 
-// Uncomment the type of sensor in use:
-#define DHTTYPE    DHT11     // DHT 11
-//#define DHTTYPE    DHT22     // DHT 22 (AM2302)
-//#define DHTTYPE    DHT21     // DHT 21 (AM2301)
+
+#define DHTTYPE    DHT11     
+
 
 DHT dht(DHTPIN, DHTTYPE);
 
 
 
-// current temperature & humidity, updated in loop()
 float t = 0.0;
 float h = 0.0;
 
-// Create AsyncWebServer object on port 80
+
 AsyncWebServer server(80);
 
-// Generally, you should use "unsigned long" for variables that hold time
-// The value will quickly become too large for an int to store
+
 unsigned long previousMillis = 0;    // will store last time DHT was updated
 
 // Updates DHT readings every 10 seconds
@@ -181,7 +178,6 @@ void setup(){
 
   Serial.println(WiFi.localIP());
 
-  // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/html", index_html, processor);
   });
@@ -192,20 +188,17 @@ void setup(){
     request->send_P(200, "text/plain", String(h).c_str());
   });
 
-  // Start server
+
   server.begin();
 }
  
 void loop(){  
   unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= interval) {
-    // save the last time you updated the DHT values
+  if (currentMillis - previousMillis >= interval) {s
     previousMillis = currentMillis;
-    // Read temperature as Celsius (the default)
+   
     float newT = dht.readTemperature();
-    // Read temperature as Fahrenheit (isFahrenheit = true)
-    //float newT = dht.readTemperature(true);
-    // if temperature read failed, don't change t value
+ 
     if (isnan(newT)) {
       Serial.println("Failed to read from DHT sensor!");
     }
@@ -214,9 +207,9 @@ void loop(){
       Serial.println(t);
       Serial.println("'c");
     }
-    // Read Humidity
+
     float newH = dht.readHumidity();
-    // if humidity read failed, don't change h value 
+    
     if (isnan(newH)) {
       Serial.println("Failed to read from DHT sensor!");
     }
